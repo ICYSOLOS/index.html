@@ -1,72 +1,318 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Access Denied</title>
+
+    <title>ACCESS DENIED</title>
 
     <style>
         * {
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
             margin: 0;
-            min-height: 100vh;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #050505;
+            color: #ff3030;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        body {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #000;
-            color: #fff;
-            font-family: Arial, Helvetica, sans-serif;
-            text-align: center;
-            padding: 25px;
+            position: relative;
         }
 
-        .warning {
-            max-width: 700px;
+        /* CRT scanlines */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.025) 0px,
+                rgba(255,255,255,0.025) 1px,
+                transparent 1px,
+                transparent 4px
+            );
+            z-index: 20;
+        }
+
+        /* Dark screen edges */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(
+                circle,
+                transparent 45%,
+                rgba(0,0,0,0.85) 100%
+            );
+            z-index: 19;
+        }
+
+        .background {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        .binary {
+            position: absolute;
+            color: #ff3030;
+            font-size: 13px;
+            white-space: nowrap;
+            animation: drift 18s linear infinite;
+        }
+
+        .b1 { top: 8%; left: -20%; }
+        .b2 { top: 25%; left: -50%; animation-delay: -5s; }
+        .b3 { top: 52%; left: -30%; animation-delay: -11s; }
+        .b4 { top: 78%; left: -60%; animation-delay: -15s; }
+
+        @keyframes drift {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(150vw);
+            }
+        }
+
+        .terminal {
+            width: min(900px, 92vw);
+            border: 1px solid #8f1515;
+            background: rgba(5, 5, 5, 0.94);
+            box-shadow:
+                0 0 20px rgba(255, 0, 0, 0.15),
+                inset 0 0 30px rgba(255, 0, 0, 0.04);
+            position: relative;
+            z-index: 10;
+        }
+
+        .topbar {
+            height: 42px;
+            border-bottom: 1px solid #8f1515;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .status {
+            color: #ff3030;
+        }
+
+        .content {
+            padding: clamp(35px, 7vw, 75px);
+            text-align: center;
+        }
+
+        .warning-icon {
+            font-size: clamp(45px, 10vw, 85px);
+            animation: pulse 1.5s infinite;
+            filter: drop-shadow(0 0 12px rgba(255,0,0,0.7));
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.45;
+                transform: scale(0.96);
+            }
         }
 
         h1 {
-            font-size: clamp(2rem, 8vw, 4.5rem);
-            margin: 0 0 35px;
-            letter-spacing: 2px;
+            margin: 20px 0 10px;
+            font-size: clamp(32px, 7vw, 72px);
+            letter-spacing: clamp(3px, 1vw, 10px);
+            color: #ff3030;
+            text-shadow:
+                0 0 8px rgba(255,0,0,0.8),
+                0 0 25px rgba(255,0,0,0.35);
+            animation: glitch 3s infinite;
         }
 
-        p {
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
-            line-height: 1.7;
-            margin: 15px 0;
+        @keyframes glitch {
+            0%, 92%, 100% {
+                transform: translate(0);
+            }
+
+            93% {
+                transform: translate(-3px, 1px);
+            }
+
+            94% {
+                transform: translate(3px, -1px);
+            }
+
+            95% {
+                transform: translate(0);
+            }
+        }
+
+        .line {
+            width: 100%;
+            height: 1px;
+            background: #8f1515;
+            margin: 30px 0;
+            box-shadow: 0 0 8px rgba(255,0,0,0.4);
+        }
+
+        .message {
+            color: #bdbdbd;
+            font-size: clamp(14px, 2.5vw, 19px);
+            line-height: 1.8;
+        }
+
+        .command {
+            margin: 30px auto;
+            max-width: 600px;
+            padding: 15px;
+            border: 1px solid #333;
+            background: #090909;
+            color: #777;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .command span {
+            color: #ff3030;
         }
 
         .leave {
+            margin-top: 25px;
+            font-size: clamp(25px, 5vw, 42px);
             font-weight: bold;
-            font-size: 1.5em;
-            letter-spacing: 2px;
+            letter-spacing: 5px;
+            color: #fff;
+            text-shadow: 0 0 12px rgba(255,255,255,0.5);
         }
 
-        .evil {
-            margin-top: 25px;
-            font-size: 1.4rem;
+        .choice {
+            color: #777;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .footer {
+            border-top: 1px solid #8f1515;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            color: #555;
+            font-size: 11px;
+        }
+
+        .blink {
+            animation: blink 1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .footer {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+
+            .command {
+                font-size: 11px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <main class="warning">
-        <h1>⚠️ ACCESS DENIED ⚠️</h1>
 
-        <p>
-            Please contact the appropriate person for more information.
-        </p>
+    <div class="background">
+        <div class="binary b1">
+            01001000 01000001 01001100 01010100 00100000 01000100 01001111 00100000 01001110 01001111 01010100 00100000 01000101 01001110 01010100 01000101 01010010
+        </div>
 
-        <p>
-            Or just <span class="leave">LEAVE.</span>
-        </p>
+        <div class="binary b2">
+            SYSTEM_CHECK // SECURITY_LAYER // ACCESS_CONTROL // AUTHORIZATION_REQUIRED
+        </div>
 
-        <p class="evil">
-            The choice is yours. 😈
-        </p>
+        <div class="binary b3">
+            10110101 00101101 11001001 01010110 00110011 10101010 01001101 00101101 11100001
+        </div>
+
+        <div class="binary b4">
+            WARNING // UNAUTHORIZED ACCESS // SECURITY PROTOCOL ACTIVE // CONNECTION TERMINATED
+        </div>
+    </div>
+
+    <main class="terminal">
+
+        <div class="topbar">
+            <div>SECURITY TERMINAL v4.7.2</div>
+            <div class="status">
+                ● SYSTEM ACTIVE
+            </div>
+        </div>
+
+        <section class="content">
+
+            <div class="warning-icon">⚠️</div>
+
+            <h1>ACCESS DENIED</h1>
+
+            <div class="line"></div>
+
+            <div class="message">
+                Please contact the appropriate person for more information.
+            </div>
+
+            <div class="command">
+                &gt; SECURITY STATUS:
+                <span>RESTRICTED</span><br><br>
+
+                &gt; AUTHORIZATION:
+                <span>REQUIRED</span><br><br>
+
+                &gt; ACCESS LEVEL:
+                <span>INSUFFICIENT</span>
+            </div>
+
+            <div class="leave">
+                OR JUST <span class="blink">LEAVE.</span>
+            </div>
+
+            <div class="choice">
+                The choice is yours. 😈
+            </div>
+
+        </section>
+
+        <div class="footer">
+            <div>UNAUTHORIZED ACCESS IS PROHIBITED</div>
+            <div>STATUS: <span class="blink">LOCKED</span></div>
+        </div>
+
     </main>
+
 </body>
 </html>
+```
